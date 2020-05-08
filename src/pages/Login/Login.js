@@ -27,9 +27,12 @@ class Login extends Component {
         let alias = this.state.usuario;
         let clave = this.state.password;
         try {
-            const response = await axios.post('https://jockey-web.herokuapp.com/login', {
+            let captcha = window.grecaptcha.getResponse();
+            // const response = await axios.post('https://jockey-web.herokuapp.com/login', {
+            const response = await axios.post('http://localhost:7559/login', {
                 'alias': alias,
-                'clave': clave
+                'clave': clave,
+                'captchaResponse': captcha
             });
             console.log('👉 Returned data:', response);
             if (response.status === 200) {
@@ -45,10 +48,6 @@ class Login extends Component {
         } catch (e) {
             console.log(`😱 Axios request failed: ${e}`);
         }
-    }
-
-    showResponse(response) {
-        console.log("Validacion Captcha respondida");
     }
 
     render(){
@@ -76,7 +75,7 @@ class Login extends Component {
                             </div>
                         </div>
                         <div className="content-section implementation button-demo">
-                            {/* <Captcha id="captcha" language="es" theme="light" siteKey="6LeEvFsUAAAAALqEXVMvulgVYRfNdcJdJKbCq6gO" onResponse={this.showResponse} /> */}
+                            <Captcha id="captcha" size="normal" language="es" theme="light" siteKey="6LeEvFsUAAAAALqEXVMvulgVYRfNdcJdJKbCq6gO" />
                         </div>
                         <br />
                         <Button type="submit" label="Acceder" className="p-button-raised p-button-primary" />
