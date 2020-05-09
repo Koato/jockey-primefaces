@@ -1,19 +1,20 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import { Card } from 'primereact/card';
+import { InputText } from "primereact/inputtext";
+import { Captcha } from 'primereact/captcha';
+import { Button } from 'primereact/button';
+import { LoginService } from '../../api/service/LoginService';
 import "./Login.css";
-import {Card} from 'primereact/card';
-import {InputText} from "primereact/inputtext";
-import {Captcha} from 'primereact/captcha';
-import {Button} from 'primereact/button';
-import axios from "axios";
 
 class Login extends Component {
 
-    constructor(props){
-        super(props);
+    constructor(){
+        super();
         this.state = {
             usuario: '',
             password: ''
         }
+        this.loginService = new LoginService();
     }
 
     handleChangeText = (event) => {
@@ -22,29 +23,16 @@ class Login extends Component {
         })
     }
 
-    handleSubmit = async (event) => {
-        event.preventDefault();
-        let alias = this.state.usuario;
-        let clave = this.state.password;
+    handleSubmit = (event) => {
         try {
+            event.preventDefault();
+            let alias = this.state.usuario;
+            let clave = this.state.password;
             let captcha = window.grecaptcha.getResponse();
-            const response = await axios.post('https://jockey-web.herokuapp.com/login', {
-            // const response = await axios.post('http://localhost:7559/login', {
-                'alias': alias,
-                'clave': clave,
-                'captchaResponse': captcha
+            // ejecuto una promesa
+            this.loginService.loguear(alias, clave, captcha).then(data => {
+                console.log('👉 Returned data:', data);
             });
-            console.log('👉 Returned data:', response);
-            if (response.status === 200) {
-                console.log('Almacenando el token en el LocalStorage...');
-                localStorage.setItem("user_jck_token", response.data.token);
-                console.log('Obteniendo el token del LocalStorage...');
-                console.log(localStorage.getItem("user_jck_token"));
-                console.log('Eliminando el token del LocalStorage...');
-                localStorage.removeItem("user_jck_token");
-                console.log('Obteniendo el token del LocalStorage...');
-                console.log(localStorage.getItem("user_jck_token"));
-            }
         } catch (e) {
             console.log(`😱 Axios request failed: ${e}`);
         }

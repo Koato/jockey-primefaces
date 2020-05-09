@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-// import App from './App';
-import Login from "./pages/Login/Login";
+import Lista from "./pages/Lista";
 import * as serviceWorker from './serviceWorker';
 
 import 'primereact/resources/themes/nova-light/theme.css';
@@ -11,8 +10,7 @@ import 'primeicons/primeicons.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    {/* <App /> */}
-    <Login />
+    <Lista />
   </React.StrictMode>,
   document.getElementById('root')
 );
