@@ -22,6 +22,7 @@ export class PersonaService {
                 'Authorization': this.tokenLogin
             }
         });
+        return response.data;
     }
 
     async crearPersona(alias, clave, estado, [roles]){
@@ -35,6 +36,7 @@ export class PersonaService {
                 'Authorization': this.tokenLogin
             }
         });
+        return response.data;
     }
 
     async actualizarPersona(id, alias, clave, estado, [roles]){
@@ -48,6 +50,7 @@ export class PersonaService {
                 'Authorization': this.tokenLogin
             }
         });
+        return response.data;
     }
 
     async eliminarPersona(id){
@@ -56,5 +59,6 @@ export class PersonaService {
                 'Authorization': this.tokenLogin
             }
         });
+        return response.data;
     }
 }
