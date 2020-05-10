@@ -1,6 +1,9 @@
 export class Token {
+    // nombre del token
     nombre_jwt_localStorage = "user_jck_token";
+    // nombre del tipo de token
     type_jwt_localStorage = "type_jck_token";
+    // nombre del usuario logueado
     nombre_user_localStorage = "user_jck_name";
     
     almacenar_localStorage(data) {

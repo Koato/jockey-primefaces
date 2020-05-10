@@ -24,6 +24,13 @@ export class LoginService {
     }
 
     obtenerToken(){
-        return this.token.getTokenType().concat(" ").concat(this.token.getToken());
+        try {
+            if(this.token.getTokenType()){
+                return this.token.getTokenType().concat(" ").concat(this.token.getToken());
+            }
+        } catch (error) {
+            this.token.borrar_localStorage();
+        }
+        return null;
     }
 }

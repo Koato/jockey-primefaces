@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Lista from "./pages/Lista";
+import Welcome from "./pages/Welcome";
 import * as serviceWorker from './serviceWorker';
 
 import 'primereact/resources/themes/nova-light/theme.css';
@@ -10,7 +10,7 @@ import 'primeicons/primeicons.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Lista />
+    <Welcome />
   </React.StrictMode>,
   document.getElementById('root')
 );

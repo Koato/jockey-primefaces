@@ -8,6 +8,7 @@ export class PersonaService {
     tokenLogin = new LoginService().obtenerToken();
     
     async listarTodo(){
+        this.validarInfoToken();
         const response = await axios.get(this.baseUrl + '/usuarios', {
             headers : {
                 'Authorization': this.tokenLogin
@@ -17,6 +18,7 @@ export class PersonaService {
     }
 
     async listarId(id){
+        this.validarInfoToken();
         const response = await axios.get(this.baseUrl + '/usuarios/' + id, {
             headers : {
                 'Authorization': this.tokenLogin
@@ -26,6 +28,7 @@ export class PersonaService {
     }
 
     async crearPersona(alias, clave, estado, [roles]){
+        this.validarInfoToken();
         const response = await axios.post(this.baseUrl + '/usuarios', {
             "alias": alias,
             "clave": clave,
@@ -40,6 +43,7 @@ export class PersonaService {
     }
 
     async actualizarPersona(id, alias, clave, estado, [roles]){
+        this.validarInfoToken();
         const response = await axios.put(this.baseUrl + '/usuarios/' + id, {
             "alias": alias,
             "clave": clave,
@@ -54,11 +58,18 @@ export class PersonaService {
     }
 
     async eliminarPersona(id){
+        this.validarInfoToken();
         const response = await axios.delete(this.baseUrl + '/usuarios/' + id, {
             headers : {
                 'Authorization': this.tokenLogin
             }
         });
         return response.data;
+    }
+
+    validarInfoToken() {
+        if(this.tokenLogin === null){
+            throw new Error("Se requiere loguearse");
+        }
     }
 }
