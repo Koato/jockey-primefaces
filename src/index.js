@@ -9,9 +9,10 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Welcome />
-  </React.StrictMode>,
+  // <React.StrictMode>
+    // <Welcome />
+  // </React.StrictMode>,
+  <Welcome />,
   document.getElementById('root')
 );
 

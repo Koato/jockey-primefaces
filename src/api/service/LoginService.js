@@ -12,11 +12,16 @@ export class LoginService {
             'alias': alias,
             'clave': clave,
             'captchaResponse': captcha
+        }).catch(e => {
+            return e.response;
         });
         if(response.status === 200){
             this.token.almacenar_localStorage(response.data);
+            return response.data.mensaje;
         }
-        return response.data.mensaje;
+        if(response.status === 401){
+            throw response.data.mensaje;
+        }
     }
 
     async desloguear(){
@@ -25,11 +30,13 @@ export class LoginService {
 
     obtenerToken(){
         try {
-            if(this.token.getTokenType()){
+            if(this.token.getTokenType() && this.token.getToken()){
                 return this.token.getTokenType().concat(" ").concat(this.token.getToken());
+            }else{
+                this.desloguear();
             }
         } catch (error) {
-            this.token.borrar_localStorage();
+            this.desloguear();
         }
         return null;
     }

@@ -13,17 +13,15 @@ class Welcome extends Component {
         return(
             <Card title="Seleccione una ruta"  style={{width: '80%', margin: '0 auto'}} className="App-header ui-card-shadow">
                 <BrowserRouter>
-                    <div>
-                        <Link className="App-link" style={{margin: "0 10px"}} to="/">
-                            Login
-                        </Link>
-                        <Link className="App-link" style={{margin: "0 10px"}} to="/usuarios">
-                            Lista
-                        </Link>
-                        <Link className="App-link" style={{margin: "0 10px"}} to="/contacto">
-                            Contacto
-                        </Link>
-                    </div>
+                    <Link className="App-link" style={{margin: "0 10px"}} to="/">
+                        Login
+                    </Link>
+                    <Link className="App-link" style={{margin: "0 10px"}} to="/usuarios">
+                        Lista
+                    </Link>
+                    <Link className="App-link" style={{margin: "0 10px"}} to="/contacto">
+                        Contacto
+                    </Link>
                     {/* establesco las rutas que voy a manejar */}
                     <Switch>
                         {/* indico que mostrar en la ruta principal o vacia */}
