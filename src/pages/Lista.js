@@ -75,12 +75,16 @@ class Lista extends Component {
         return falta;
     }
 
-    handleMostrarAlerta(titulo, texto) {
+    handleMostrarAlerta(titulo, texto, tipo = 'error') {
         Swal.fire({
             title: titulo,
             text: '' + texto,
-            icon: 'error'
+            icon: tipo
         });
+    }
+
+    encontrarIndiceSeleccionUsuario() {
+        return this.state.usuarios.indexOf(this.state.selected);
     }
 
     nuevo = () => {
@@ -88,7 +92,6 @@ class Lista extends Component {
         if(faltantes === 0){
             let usuarios = [...this.state.usuarios];
             this.personaServices.crearPersona(this.state.usuario).then(data => {
-                console.log(data);
                 usuarios.push(data.usuario);
                 this.setState({
                     usuarios,
@@ -119,13 +122,51 @@ class Lista extends Component {
         }
     }
 
-    // actualizar = () => {
-        
-    // }
+    actualizar = () => {
+        if(this.encontrarIndiceSeleccionUsuario() !== -1) {
+            let faltantes = this.validarContenido();
+            if(1 <= faltantes){
+                console.log(this.state.selected);
+                console.log(this.state.usuario);
+                // let usuarios = [...this.state.usuarios];
+                // usuarios[this.encontrarIndiceSeleccionUsuario()] = this.state.usuario;
+                this.setState({
+                    displayDialog: true
+                });
+            }else{
+                this.handleMostrarAlerta("No podemos continuar...", "Solo puedes dejar el campo 'clave' sin datos");
+            }
+        }
+    }
     
-    // eliminar = () => {
-        
-    // }
+    eliminar = () => {
+        let index = this.encontrarIndiceSeleccionUsuario();
+        if(index !== -1) {
+            Swal.fire({
+                title: 'Quieres eliminar a este usuario?',
+                text: "No vas a poder revertir esta acción ...",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, quiero eliminarlo',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.value) {
+                  this.personaServices.eliminarPersona(this.state.selected.id).then(data => {
+                      this.setState({
+                          usuarios: this.state.usuarios.filter((val,i) => i !== index),
+                          selected: null,
+                          displayDialog: false
+                      });
+                      this.handleMostrarAlerta('Genial!', data.mensaje, 'success');
+                  }, error => {
+                      console.log(error.response.data.error);
+                  });
+                }
+            });
+        }
+    }
 
     handleChangeText = (event) => {
         let usuario = this.state.usuario;
@@ -172,7 +213,7 @@ class Lista extends Component {
                     selectionMode="single"
                     selection={this.state.selected}
                     onSelectionChange={e => this.setState({ selected: e.value })}
-                    // onRowSelect={this.onCarSelect}
+                    // onRowSelect={e => this.setState({ selected: Object.assign({}, e.data) })}
                     // hacer scroll y tamaño de la tabla
                     scrollable={true} scrollHeight="200px"
                     //se adapta al tamaño de la pantalla
@@ -183,7 +224,7 @@ class Lista extends Component {
                     loading={this.state.loading}
                     // ordenamiento multiple
                     sortMode="multiple" >
-                        <Column field="id" header="ID" />
+                        {/* <Column field="id" header="ID" /> */}
                         <Column field="alias" header="Alias" sortable={true} />
                         <Column field="tiempoAcceso" header="Fecha de acceso" sortable={true} />
                         <Column field="roles" header="Roles" sortable={true} />
