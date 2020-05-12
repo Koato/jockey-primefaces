@@ -1,10 +1,11 @@
 import axios from 'axios';
+import * as moment from "moment";
+import 'moment/locale/es';
 import { LoginService } from './LoginService';
 
 export class PersonaService {
     // baseUrl = 'http://localhost:7559';
     baseUrl = 'https://jockey-web.herokuapp.com';
-    
     
     async listarTodo(){
         let tokenLogin = this.validarInfoToken();
@@ -25,14 +26,14 @@ export class PersonaService {
         });
         return response.data;
     }
-
+    
     async crearPersona(usuario){
         let tokenLogin = this.validarInfoToken();
         const response = await axios.post(this.baseUrl + '/usuarios', {
             "alias": usuario.alias,
             "clave": usuario.clave,
             "estado": usuario.estado,
-            "tiempoAcceso": '10/05/2020',
+            "tiempoAcceso": moment().format('DD/MM/YYYY HH:mm:ss'),
             "roles": usuario.roles
         }, {
             headers : {
@@ -48,6 +49,7 @@ export class PersonaService {
             "alias": alias,
             "clave": clave,
             "estado": estado,
+            "tiempoAcceso": moment().format('DD/MM/YYYY HH:mm:ss'),
             "roles": [roles]
         }, {
             headers : {

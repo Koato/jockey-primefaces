@@ -26,7 +26,8 @@ class Lista extends Component {
                 estado: '',
                 roles: []
             },
-            displayDialog: false
+            displayDialog: false,
+            displayDialogEdit: false
         }
         this.personaServices = new PersonaService();
     }
@@ -125,11 +126,20 @@ class Lista extends Component {
     actualizar = () => {
         if(this.encontrarIndiceSeleccionUsuario() !== -1) {
             let faltantes = this.validarContenido();
-            if(1 <= faltantes){
+            if(1 < faltantes){
                 console.log(this.state.selected);
+                this.setState({
+                    usuario: {
+                        id: this.state.selected.id,
+                        alias: this.state.selected.alias,
+                        clave: this.state.selected.clave,
+                        estado: this.state.selected.estado,
+                        roles: [this.state.selected.roles]
+                    }
+                });
                 console.log(this.state.usuario);
                 // let usuarios = [...this.state.usuarios];
-                // usuarios[this.encontrarIndiceSeleccionUsuario()] = this.state.usuario;
+                // usuarios[this.encontrarIndiceSeleccionUsuario()] = this.state.selected;
                 this.setState({
                     displayDialog: true
                 });
@@ -193,6 +203,10 @@ class Lista extends Component {
                             <Button className="p-button-raised p-button-secondary" label="Cancelar" icon="pi pi-times" onClick={() => this.setState({displayDialog: false})} />
                             <Button className="p-button-raised p-button-success" label="Guardar" icon="pi pi-check" onClick={this.nuevo} />
                         </div>;
+        let dialogFooterEdit = <div className="ui-dialog-buttonpane p-clearfix">
+                            <Button className="p-button-raised p-button-secondary" label="Cancelar" icon="pi pi-times" onClick={() => this.setState({displayDialog: false})} />
+                            <Button className="p-button-raised p-button-success" label="Guardar" icon="pi pi-check" onClick={this.nuevo} />
+                        </div>;
 
         const cities = [
             {name: 'Activo', code: true},
@@ -233,6 +247,39 @@ class Lista extends Component {
                 {/* modal para crear el nuevo usuario */}
                 <Dialog visible={this.state.displayDialog} width="300px" header="Detalle de usuario" 
                 modal={true} blockScroll={true} footer={dialogFooter} onHide={() => this.setState({displayDialog: false})} >
+                    <div className="p-grid p-fluid">
+                        <div className="p-col-4" style={{padding:'.75em'}}><label htmlFor="alias">Alias</label></div>
+                        <div className="p-col-8" style={{padding:'.5em'}}>
+                            <InputText name="alias" onChange={this.handleChangeText} value={this.state.usuario.alias}/>
+                        </div>
+
+                        <div className="p-col-4" style={{padding:'.75em'}}><label htmlFor="clave">Clave</label></div>
+                        <div className="p-col-8" style={{padding:'.5em'}}>
+                            <Password name="clave" promptLabel="Ingrese su clave"
+                            weakLabel="Débil" mediumLabel="Medio débil" strongLabel="Fuerte"
+                            tooltip="Procure que su clave tenga «letras, números y símbolos»"
+                            onChange={this.handleChangeText} value={this.state.usuario.clave} />
+                        </div>
+
+                        <div className="p-col-4" style={{padding:'.75em'}}><label htmlFor="estado">Estado</label></div>
+                        <div className="p-col-8" style={{padding:'.5em'}}>
+                            <Dropdown name="estado" placeholder="Indique el estado" options={cities} 
+                            optionLabel="name" optionValue="code"
+                            onChange={this.handleChangeText} value={this.state.usuario.estado} />
+                        </div>
+
+                        <div className="p-col-4" style={{padding:'.75em'}}><label htmlFor="roles">Roles</label></div>
+                        <div className="p-col-8" style={{padding:'.5em'}}>
+                            <Chips name="roles" separator="," max={3}
+                            allowDuplicate={false}
+                            tooltip="Separe los valores con «,» o «enter»" 
+                            value={this.state.usuario.roles} onChange={this.handleChangeText} />
+                        </div>
+                    </div>
+                </Dialog>
+                {/* modal para crear el editar usuario */}
+                <Dialog visible={this.state.displayDialogEdit} width="300px" header="Detalle de usuario" 
+                modal={true} blockScroll={true} footer={dialogFooterEdit} onHide={() => this.setState({displayDialogEdit: false})} >
                     <div className="p-grid p-fluid">
                         <div className="p-col-4" style={{padding:'.75em'}}><label htmlFor="alias">Alias</label></div>
                         <div className="p-col-8" style={{padding:'.5em'}}>
